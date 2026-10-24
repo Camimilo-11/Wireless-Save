@@ -9,7 +9,6 @@
 \usepackage{listings}
 \usepackage[hidelinks]{hyperref}
 \graphicspath{{figures/}}
-\input{enlaces.tex}
 \pagestyle{plain}
 \newcommand{\NR}{\textit{not measured}}
 \newcommand{\E}{\mathbb{E}}
@@ -571,7 +570,7 @@ Only after those checks would obstacle experiments be interpretable. An eventual
 
 \section{Reproducibility}
 \subsection{Editable source and compilation}
-The manuscript uses the official IEEEtran conference class and continuous two-column LaTeX flow. The editable package contains \texttt{main.tex}, \texttt{refs.bib}, \texttt{enlaces.tex}, figures, source-code listings, and the unmodified class and bibliography style. Its main document is \texttt{main.tex}; the bibliography uses BibTeX with the IEEEtran style.
+The manuscript uses the official IEEEtran conference class and continuous two-column LaTeX flow. The editable package contains \texttt{main.tex}, \texttt{refs.bib}, figures, source-code listings, and the unmodified class and bibliography style. Its main document is \texttt{main.tex}; the bibliography uses BibTeX with the IEEEtran style.
 
 The PDF is a project manuscript. Its use of the IEEEtran layout does not imply publication or peer review. The source package and provenance manifest permit independent inspection of the document, figures, implementation, and input-result files.
 
@@ -585,7 +584,7 @@ Rerunning the experiment overwrites generated outputs in the selected output dir
 An independent reader can check the error table directly from saved predictions, the EM diagnostic table from its replicate summary, the mixture density from the fitted parameters, and the scalar equivalence by factoring $\gamma$ from the normal equations. These checks cover different failure modes and are more informative than treating the existence of a PDF as evidence that the computation is correct.
 
 \subsection{Implementation and artifact availability}
-The EM implementation is C++17. Auxiliary Python scripts support the synthetic application and numerical validation. The repository, manuscript workspace, and recorded-presentation links are listed in Appendix~\ref{app:links}; a pending entry indicates that a public URL is not yet available.
+The EM implementation is C++17. Auxiliary Python scripts support the synthetic application and numerical validation. The editable source package contains the complete C++ source, its extracted core listing, and the manuscript figures. The provenance manifest identifies the source and result-file hashes used in this study.
 
 \section{Conclusion}
 The restricted C++17 EM implementation recovers known mixture parameters with decreasing error as calibration sample size generally increases, and the tested random starts yield nearly identical estimates on one fixed sample. These are direct, reproducible findings about the algorithm under its own generating assumptions. The derivation and numerical example explain why responsibilities and weighted second moments produce those updates. Python utilities support the surrounding synthetic application and the reference cross-checks.
@@ -637,16 +636,6 @@ $\alpha/\gamma$ equivalence & Algebra of Eqs.~\eqref{eq:fisheroperator}--\eqref{
 \end{table}
 
 Figure~\ref{fig:comparison} uses the current preliminary-results comparison PNG; the other plots correspond to the diagnostic and metric files identified in their captions.
-
-\section{Delivery Links}
-\label{app:links}
-Project artifact links are listed below. Pending entries indicate unavailable URLs.
-
-\noindent\textbf{Overleaf manuscript:} \OverleafLink
-
-\medskip\noindent\textbf{GitHub repository:} \GitHubLink
-
-\medskip\noindent\textbf{Recorded presentation:} \VideoLink
 
 \bibliographystyle{IEEEtran}
 \bibliography{refs}

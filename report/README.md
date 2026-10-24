@@ -6,7 +6,6 @@ This directory contains the editable IEEEtran manuscript and its compiled PDF fo
 
 - `main.tex`: main LaTeX document.
 - `refs.bib`: verified references and DOI metadata.
-- `enlaces.tex`: artifact links used in the manuscript appendix.
 - `figures/`: figures reproduced from the current experiment snapshot.
 - `codigo/em.cpp`: complete C++ source included with the manuscript.
 - `codigo/em_core.cpp`: core listing extracted from that source.
@@ -27,7 +26,7 @@ pdflatex main.tex
 pdflatex main.tex
 ```
 
-Alternatively, upload `Overleaf_RTI_EM.zip` as a new Overleaf project, select `main.tex` as the main document, and use pdfLaTeX. All required manuscript figures, local class/style files, bibliography, links, and C++ listings are included. C++ compilation is independent of LaTeX compilation.
+Alternatively, upload `Overleaf_RTI_EM.zip` as a new Overleaf project, select `main.tex` as the main document, and use pdfLaTeX. All required manuscript figures, local class/style files, bibliography, and C++ listings are included. C++ compilation is independent of LaTeX compilation.
 
 ## Evidence and scope
 

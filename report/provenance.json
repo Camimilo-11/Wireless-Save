@@ -38,15 +38,11 @@
   "manuscript_sources": [
     {
       "path": "main.tex",
-      "sha256": "4210717319e88d1d14e921044b3a6d1c0029335d82ba9aff9ee67eb526238759"
+      "sha256": "be4199335f7e948b2d6c01a06c8bf52657701e0ec8cc6ba3112a630b0ecafe11"
     },
     {
       "path": "refs.bib",
       "sha256": "f5751f55eac7e414488a4c0e924bb34340f1ff05fc818688b2509b08e74d7ea2"
-    },
-    {
-      "path": "enlaces.tex",
-      "sha256": "93ac90895570f04eb05e232a3993592703dc605c0f989fb16247a4e41da78a12"
     },
     {
       "path": "IEEEtran.cls",
