@@ -11,3 +11,6 @@ report/*.blg
 report/*.xdv
 report/*.synctex.gz
 report/main.pdf
+
+build/
+*.exe

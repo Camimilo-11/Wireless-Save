@@ -1,6 +1,6 @@
 # EM para calibración de ruido RSS: estudio sintético con RTI
 
-Proyecto de Análisis de Algoritmos de Camilo Vásquez. El profesor aprobó **Python**. El objetivo principal es explicar y evaluar EM para estimar una mezcla de dos gaussianas con medias fijadas en cero.
+Proyecto de Análisis de Algoritmos de Camilo Vásquez. La entrega del algoritmo asignado debe ser en **C++17**. El objetivo principal es explicar y evaluar EM para estimar una mezcla de dos gaussianas con medias fijadas en cero.
 
 ## Archivos para grabar y entregar
 
@@ -10,23 +10,34 @@ Proyecto de Análisis de Algoritmos de Camilo Vásquez. El profesor aprobó **Py
 - `notes/guia_defensa_em.md`: preguntas para preparar la defensa.
 - `report/Informe_IEEE_RTI_EM.pdf`: informe en plantilla IEEE Conference.
 - `report/main.tex` y `report/Overleaf_RTI_EM.zip`: manuscrito editable y paquete para Overleaf.
-- `em_ruido.py`: núcleo corto de EM que se muestra al explicar el algoritmo.
-- `demo_em.py`: demostración numérica de una iteración sobre cuatro residuos.
+- `em.cpp`: implementación C++17 de EM y demostración que se muestra al explicar el algoritmo.
+- `compilar_cpp.py`: ayuda para compilar el ejecutable con g++ sin dependencias externas de C++.
+- `em_cpp.py`: adaptador para usar el ejecutable C++ desde los experimentos auxiliares en Python.
 
-## Ejecutar los experimentos
+## Compilar y mostrar el algoritmo C++
 
-Requiere Python 3.10 o posterior, NumPy y Matplotlib. Desde esta carpeta:
+Requiere g++ con soporte C++17. El núcleo utiliza únicamente la biblioteca estándar. Desde esta carpeta:
+
+```powershell
+python .\compilar_cpp.py
+.\build\em.exe --demo
+```
+
+El helper ejecuta g++ y crea el programa nativo. El ejemplo muestra una iteración E/M sobre cuatro residuos, sin necesitar datos Wi-Fi ni NumPy.
+
+## Ejecutar los experimentos auxiliares
+
+Python 3.10 o posterior, NumPy y Matplotlib generan datos y gráficas. **Todos los ajustes EM los ejecuta el programa C++** mediante el adaptador. Desde esta carpeta:
 
 ```powershell
 python -m pip install -r requirements.txt
 python .\simulacion_rti_em_knn.py --output-dir .\results\python_preliminary
 python .\analizar_resultados.py
-python .\demo_em.py
 ```
 
 El escenario principal usa semilla 7, 12 nodos, 66 enlaces, 100 píxeles, 500 consultas, 5.000 residuos de calibración, 20 réplicas por tamaño muestral y 20 inicializaciones. Los argumentos efectivos se guardan en `results/python_preliminary/parametros.json`.
 
-`em_ruido.py` contiene las actualizaciones E/M. El simulador organiza geometría, generación y reconstrucción RTI/KNN. El analizador valida IDs de caso, calcula comparaciones pareadas y crea las figuras. La generación de documentos es independiente del algoritmo que se explica.
+`em.cpp` contiene las actualizaciones E/M. `em_ruido.py` se conserva solo como referencia Python para comprobar la paridad del port, no como implementación de entrega. El simulador organiza geometría, generación y reconstrucción RTI/KNN. El analizador valida IDs de caso, calcula comparaciones pareadas y crea las figuras. La generación de documentos es independiente del algoritmo que se explica.
 
 ## Resultados e interpretación
 

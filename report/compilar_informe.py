@@ -71,6 +71,28 @@ def refresh_figures() -> list[dict]:
     return provenance
 
 
+def refresh_cpp_source() -> dict:
+    """Package the actual assigned C++ implementation and its marked core."""
+    source = ROOT / "em.cpp"
+    if not source.is_file():
+        raise SystemExit(f"Falta fuente C++ asignada: {source}")
+    code_dir = REPORT / "codigo"
+    code_dir.mkdir(exist_ok=True)
+    destination = code_dir / "em.cpp"
+    shutil.copy2(source, destination)
+    source_text = source.read_text(encoding="utf-8")
+    start_marker, end_marker = "// BEGIN EM CORE", "// END EM CORE"
+    if start_marker not in source_text or end_marker not in source_text:
+        raise SystemExit("em.cpp debe delimitar el nucleo con BEGIN/END EM CORE")
+    core = source_text.split(start_marker, 1)[1].split(end_marker, 1)[0].strip()
+    (code_dir / "em_core.cpp").write_text(core + "\n", encoding="utf-8")
+    return {
+        "language": "C++17", "source": "em.cpp", "sha256": sha256(source),
+        "packaged_source": "codigo/em.cpp", "packaged_core": "codigo/em_core.cpp",
+        "core_sha256": sha256(code_dir / "em_core.cpp"),
+    }
+
+
 def package_sources() -> None:
     names = [
         "main.tex", "refs.bib", "enlaces.tex", "IEEEtran.cls", "IEEEtran.bst",
@@ -82,12 +104,21 @@ def package_sources() -> None:
             archive.write(path, arcname=name)
         for path in sorted((REPORT / "figures").glob("*.png")):
             archive.write(path, arcname=path.relative_to(REPORT).as_posix())
+        for path in sorted((REPORT / "codigo").glob("*.cpp")):
+            archive.write(path, arcname=path.relative_to(REPORT).as_posix())
 
 
 def main() -> None:
     executable = tectonic_executable()
     BUILD.mkdir(exist_ok=True)
     figures = refresh_figures()
+    cpp_source = refresh_cpp_source()
+    run_parameters = json.loads((RESULTS / "parametros.json").read_text(encoding="utf-8"))
+    backend = run_parameters.get("em_backend")
+    if not isinstance(backend, dict) or backend.get("backend") != "C++17":
+        raise SystemExit("Los resultados actuales no registran ejecucion EM en C++17.")
+    if backend.get("source_sha256") != cpp_source["sha256"]:
+        raise SystemExit("La huella del C++ actual no coincide con la que genero los resultados.")
     version = subprocess.check_output([str(executable), "--version"], text=True).strip()
     inputs = [
         RESULTS / name for name in (
@@ -105,6 +136,9 @@ def main() -> None:
         "ieeetran_bst_url": "https://ctan.math.illinois.edu/macros/latex/contrib/IEEEtran/bibtex/IEEEtran.bst",
         "source_paper_pdf": "https://span.ece.utah.edu/uploads/RTI_version_3.pdf",
         "source_equations": {"noise": 10, "fisher": 15, "tikhonov": 29},
+        "assigned_algorithm": cpp_source,
+        "em_execution": backend,
+        "supporting_tools": "Python data generation, RTI, plotting, and reference validation",
         "manuscript_sources": [
             {"path": name, "sha256": sha256(REPORT / name)}
             for name in ("main.tex", "refs.bib", "enlaces.tex", "IEEEtran.cls", "IEEEtran.bst")

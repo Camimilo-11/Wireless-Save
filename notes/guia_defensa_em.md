@@ -2,7 +2,19 @@
 
 ## Qué archivo mostrar
 
-Abre primero `em_ruido.py`, el núcleo EM de 65 líneas. Usa `simulacion_rti_em_knn.py` para mostrar de dónde vienen los residuos y cómo se conecta el ajuste al experimento. Las funciones de gráficos y generación de documentos no forman parte del algoritmo.
+Abre primero `em.cpp`, la implementación de EM en C++17. Localiza el paso E, las sumas ponderadas del paso M y el criterio de parada. `em_cpp.py` llama al ejecutable desde el experimento. Usa `simulacion_rti_em_knn.py` para mostrar de dónde vienen los residuos y cómo se conecta el ajuste. El archivo `em_ruido.py` conserva la referencia Python para comprobar paridad, mientras que los ajustes experimentales se ejecutan en C++. Las funciones de gráficos y documentos son auxiliares.
+
+Para compilar desde la raíz del proyecto:
+
+```powershell
+New-Item -ItemType Directory -Force build | Out-Null
+g++ -std=c++17 -O2 em.cpp -o build/em.exe
+.\build\em.exe --demo
+```
+
+También puedes ejecutar `python compilar_cpp.py` para invocar el compilador y después `.\build\em.exe --demo`. Mostrar el archivo C++ y su demostración permite defender el algoritmo sin recorrer el simulador completo.
+
+Dentro de `em.cpp`, `responsibility` contiene el paso E para un residuo y `fit_em` controla el ciclo y el paso M. `demo` usa cuatro residuos para mostrar una sola actualización. `main` recibe las opciones de la línea de comandos y las entradas del adaptador. La demostración pequeña y el ajuste experimental comparten el mismo núcleo.
 
 ## Preguntas y respuestas
 
@@ -54,7 +66,7 @@ Abre primero `em_ruido.py`, el núcleo EM de 65 líneas. Usa `simulacion_rti_em_
 
 ## Orden para estudiar
 
-1. Identificar entrada, salida y parámetros de `em_ruido.py`.
+1. Identificar entrada, salida y parámetros de `em.cpp`, compilar y ejecutar `--demo`.
 2. Calcular las responsabilidades del ejemplo y justificar denominadores del M-step.
 3. Distinguir EM, matriz W, regularización y K-NN.
 4. Explicar el resultado negativo frente al centro sin modificarlo.

@@ -1,6 +1,6 @@
 # Informe editable IEEEtran
 
-`main.tex` es la fuente principal, en inglés, para la entrega de Camilo Vásquez. Usa la clase oficial IEEEtran en modo `conference`, con dos columnas y flujo continuo. El alcance es calibración EM de ruido sintético y una comparación limitada de RTI. Python está aprobado para esta entrega.
+`main.tex` es la fuente principal, en inglés, para la entrega de Camilo Vásquez. Usa la clase oficial IEEEtran en modo `conference`, con dos columnas y flujo continuo. El alcance es calibración EM de ruido sintético y una comparación limitada de RTI. El algoritmo EM asignado está implementado en **C++17**; Python se utiliza como apoyo para generación de datos, RTI, validación y gráficas.
 
 ## Compilar
 
@@ -24,7 +24,7 @@ El helper usa el bundle oficial mediante su URL directa para evitar el relay que
 
 ## Overleaf
 
-Sube `Overleaf_RTI_EM.zip` como proyecto nuevo, selecciona `main.tex` como documento principal y compila con pdfLaTeX. Incluye `main.tex`, `refs.bib`, `enlaces.tex`, la clase y estilo de bibliografía IEEEtran oficiales, las figuras y la trazabilidad. Los archivos `IEEEtran.cls` y `IEEEtran.bst` se distribuyen sin modificaciones desde CTAN; sus encabezados conservan sus licencias y datos de autoría.
+Sube `Overleaf_RTI_EM.zip` como proyecto nuevo, selecciona `main.tex` como documento principal y compila con pdfLaTeX. Incluye `main.tex`, `refs.bib`, `enlaces.tex`, la clase y estilo de bibliografía IEEEtran oficiales, las figuras, la trazabilidad y `codigo/em.cpp` como fuente editable del algoritmo. El apéndice incorpora el núcleo desde esa copia del código. Los archivos `IEEEtran.cls` y `IEEEtran.bst` se distribuyen sin modificaciones desde CTAN; sus encabezados conservan sus licencias y datos de autoría.
 
 Los tres campos de enlaces se mantienen en `enlaces.tex`, generado por el actualizador central del repositorio. No sustituyas un campo pendiente por una URL sin verificar. `hyperref` se carga antes de incorporar esas macros para admitir URLs reales y los marcadores actuales.
 
@@ -36,7 +36,7 @@ Los tres campos de enlaces se mantienen en `enlaces.tex`, generado por el actual
 - El artículo fuente informa `gamma=.548`/`.5483`; la integral de sus parámetros redondeados da aproximadamente `.404414`. La discrepancia se documenta sin atribuir una causa inventada.
 - No se afirma robustez NLoS, penetración de obstáculos ni una ventaja de velocidad.
 
-La derivación, el ejemplo numérico y el listado docente son parte de la explicación del algoritmo. Los resultados se generan con el módulo real `em_ruido.py`, no ejecutando automáticamente el listado abreviado del apéndice.
+La derivación, el ejemplo numérico y el listado del núcleo C++ son parte de la explicación del algoritmo. Los ajustes EM de calibración y sus diagnósticos utilizan el ejecutable compilado desde `em.cpp`, invocado mediante `em_cpp.py`. La versión Python `em_ruido.py` se conserva como referencia de validación. El resto del simulador RTI sigue siendo una herramienta auxiliar Python.
 
 ## Fuentes científicas
 

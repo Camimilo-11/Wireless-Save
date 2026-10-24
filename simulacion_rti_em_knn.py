@@ -6,7 +6,7 @@ Flujo del prototipo
 1. Crea una cuadrícula y nodos de radio en el perímetro.
 2. Calcula la matriz elíptica W de RTI.
 3. Genera una muestra de ruido sintético de dos gaussianas y estima sus
-   parámetros con EM (media fijada en cero, como en el modelo del artículo).
+   parámetros con el EM C++17 de em.cpp mediante el adaptador em_cpp.py.
 4. Genera huellas sintéticas, reconstruye imágenes con RTI y estima la
    posición con K-NN para comparar el error y el tiempo.
 
@@ -44,7 +44,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from em_ruido import fit_zero_mean_gmm_em
+from em_cpp import backend_executable, backend_metadata, fit_zero_mean_gmm_em
 
 
 def validate_args(args: argparse.Namespace) -> None:
@@ -411,6 +411,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     validate_args(args)
+    backend_executable()  # Compila una sola vez antes de los bucles de calibración.
     rng = np.random.default_rng(args.seed)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     write_em_diagnostics(args, args.output_dir)
@@ -629,6 +630,7 @@ def main() -> None:
         "em_diagnostic_replicates": args.em_replicates,
         "test_cases": n_queries,
         "seed": args.seed,
+        "em_backend": backend_metadata(),
         "environment": {
             "python": sys.version.split()[0],
             "platform": platform.platform(),
@@ -638,7 +640,7 @@ def main() -> None:
         "rti_solver": solver_name,
         "method_note": "RTI_Tikhonov es el baseline clásico; RTI_EM_Fisher_extension aplica gamma como extensión exploratoria, no como reproducción directa del estimador del artículo.",
         "data_note": "Todas las mediciones son sintéticas; no representan una medición Wi-Fi real ni una validación con escombros.",
-        "timing_note": "Preparación propia de cada método; inferencia termina en coordenadas. Medición exploratoria, sin calentamiento ni control del orden; no sustenta superioridad de velocidad.",
+        "timing_note": "Preparación propia de cada método; EM incluye serialización e inicio del proceso C++. Compilación previa fuera de los cronómetros. Inferencia termina en coordenadas. Medición exploratoria sin calentamiento ni control del orden; no sustenta superioridad de velocidad.",
         "knn_scale_note": "Distancias sin escala común estimada por EM; el factor común se cancela en pesos normalizados salvo cuando actúa el piso numérico de 1e-6.",
     }
     params_path = args.output_dir / "parametros.json"

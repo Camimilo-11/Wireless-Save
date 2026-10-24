@@ -1,6 +1,6 @@
 # Preparación para la defensa de EM
 
-El profesor aprobó Python. La prioridad es mostrar código sencillo y explicar cada paso.
+El requisito final confirmado es implementar el algoritmo EM en C++17. La prioridad es mostrar em.cpp, ejecutar su demostración y explicar cada paso. Python conserva el papel de apoyo para generar observaciones, analizar resultados y dibujar figuras.
 
 ## Idea en 30 segundos
 

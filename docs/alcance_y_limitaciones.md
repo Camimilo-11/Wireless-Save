@@ -2,7 +2,7 @@
 
 ## Evidencia principal
 
-EM ajusta una mezcla de dos gaussianas de media fija cero a observaciones generadas con la misma familia. Se evalúa recuperación de p1, sigma1 y sigma2, variación por tamaño muestral e inicialización. La simulación utiliza ruido independiente y geometría fija. Sus resultados no acreditan propagación electromagnética ni detección entre escombros.
+El programa C++17 implementa EM y ajusta una mezcla de dos gaussianas de media fija cero a observaciones generadas con la misma familia. Se evalúa recuperación de p1, sigma1 y sigma2, variación por tamaño muestral e inicialización. La simulación utiliza ruido independiente y geometría fija. Sus resultados no acreditan propagación electromagnética ni detección entre escombros.
 
 ## Localización
 

@@ -1,10 +1,10 @@
 # Guion de exposición: 10 minutos
 
-Las diapositivas están en inglés y el discurso está en español. Los intervalos suman 10:00 y reservan tiempo para leer fórmulas y señalar datos. Ensaya con cronómetro, especialmente el ejemplo numérico. Las indicaciones entre corchetes son pausas, no texto hablado. El docente aprobó Python según la confirmación del estudiante.
+Las diapositivas están en inglés y el discurso está en español. Los intervalos suman 10:00 y reservan tiempo para leer fórmulas y señalar datos. Ensaya con cronómetro, especialmente el ejemplo numérico. Las indicaciones entre corchetes son pausas, no texto hablado. La implementación del algoritmo asignado es C++17. Python genera las entradas sintéticas, ejecuta la comparación RTI y prepara las gráficas.
 
 ## Diapositiva 1 - Título (0:00-0:30)
 
-Mi algoritmo asignado es Expectation-Maximization, o EM. Lo aplico a estimar ruido de señales RSS dentro de una simulación de Radio Tomographic Imaging, RTI. El objetivo es entender sus actualizaciones y comprobar qué recupera de datos cuyo modelo conocemos. Después evalúo una reconstrucción espacial. Todo proviene de observaciones sintéticas. La entrega incluye implementación en Python, resultados reproducibles y análisis de limitaciones.
+Mi algoritmo asignado es Expectation-Maximization, o EM. Lo aplico a estimar ruido de señales RSS dentro de una simulación de Radio Tomographic Imaging, RTI. El objetivo es entender sus actualizaciones y comprobar qué recupera de datos cuyo modelo conocemos. Después evalúo una reconstrucción espacial. Todo proviene de observaciones sintéticas. La entrega incluye el algoritmo en C++17, resultados reproducibles y análisis de limitaciones.
 
 ## Diapositiva 2 - RTI y función de EM (0:30-1:05)
 
@@ -28,7 +28,7 @@ Este ejemplo permite revisar las cuentas a mano. Tomo los residuos menos tres, m
 
 ## Diapositiva 7 - Implementación y complejidad (4:35-5:30)
 
-El núcleo explicable está en em_ruido.py. Recibe residuos y valores iniciales, calcula densidades en logaritmos para evitar problemas numéricos, obtiene responsabilidades y actualiza momentos ponderados. Aplica un piso de sigma de 0,15 decibelios y devuelve si alcanzó la tolerancia. Con dos componentes fijas, cada iteración recorre N datos: cuesta orden N. Con I iteraciones, el coste total es orden I por N. Los vectores temporales ocupan orden N memoria. La cantidad de iteraciones depende de datos e inicialización. Detenerse por cambios pequeños no garantiza el óptimo global. Los costes de construir y resolver RTI son aparte de este núcleo.
+El núcleo explicable está en em.cpp y se compila con g++ en C++17. Recibe residuos y valores iniciales, calcula densidades en logaritmos, obtiene responsabilidades y actualiza momentos ponderados. Aplica un piso de sigma de 0,15 decibelios y devuelve si alcanzó tolerancia. Con dos componentes fijas, cada iteración recorre N datos: cuesta orden N. Con I iteraciones, el coste total es orden I por N. El vector de responsabilidades ocupa orden N memoria. La cantidad de iteraciones depende de datos e inicialización. Python proporciona los datos y llama al ejecutable para los ajustes. Detenerse por cambios pequeños no garantiza el óptimo global. Los costes de RTI son aparte.
 
 ## Diapositiva 8 - Resultados de EM (5:30-6:35)
 

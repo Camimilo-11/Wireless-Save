@@ -44,10 +44,10 @@ function table(s,values,x,y,w,h,widths,size=25){
  for(let r=0;r<values.length;r++)for(let c=0;c<values[0].length;c++){let z=t.getCell(r,c);z.fill=r===0?C.navy:r%2===0?C.pale:C.white;z.text.style={typeface:'Arial',fontSize:size,bold:r===0,color:r===0?C.white:C.navy};}return t;
 }
 function note(s,text,y=609){txt(s,text,66,y,1140,54,21,false,C.orange);}
-let s=slide('Expectation-Maximization for RSS noise calibration','Course prototype. Numerical data: results/python_preliminary. Instructor approved Python according to student confirmation.');
+let s=slide('Expectation-Maximization for RSS noise calibration','Course prototype. EM implementation: em.cpp, C++17 with g++. Numerical data: results/python_preliminary, generated through the C++ EM backend. Python supplies synthetic inputs, RTI and plotting support.');
 txt(s,'A synthetic radio tomographic imaging study',66,175,1100,100,43,false,C.teal);
 txt(s,'Camilo Vásquez\nYachay Tech University\nSchool of Mathematical and Computational Sciences',66,325,1100,130,27);
-txt(s,'Implementation and preliminary results',66,525,1100,45,28,true);note(s,'Synthetic observations. No physical Wi-Fi measurements.');
+txt(s,'C++17 implementation and preliminary results',66,525,1100,45,28,true);note(s,'Synthetic observations. No physical Wi-Fi measurements.');
 
 s=slide('RTI and the role of EM','RTI forward model and ellipsoidal weights: Wilson & Patwari [3]. Fingerprint context: Bahl & Padmanabhan [4]. This study uses generated data rather than their measurements.');
 txt(s,'RTI reconstructs attenuation from changes across radio links.',66,156,1120,70,33,true,C.teal);txt(s,'y = W x + noise',66,258,1130,60,43,true);
@@ -63,7 +63,7 @@ txt(s,'f(r) = p N(r; 0, s1^2) + (1 - p) N(r; 0, s2^2)',66,159,1140,80,35,true,C.
 table(s,[['Unknown','Meaning','Generating value'],['p','Probability of the narrow component','0.548'],['s1','Narrow-component standard deviation','0.971 dB'],['s2','Wide-component standard deviation','3.003 dB']],66,268,1130,253,[145,710,275],24);
 txt(s,'Observed: residual r in dB\nHidden: which Gaussian generated that residual',66,551,1140,78,27);
 
-s=slide('EM updates','Direct specialization of Dempster et al. [1] to fixed zero means. Code: em_ruido.py. Stopping and initialization cautions: Wu [2].');
+s=slide('EM updates','Direct specialization of Dempster et al. [1] to fixed zero means. C++ code: em.cpp. Stopping and initialization cautions: Wu [2].');
 txt(s,'E-step: soft component assignment',66,150,1130,46,30,true,C.teal);
 txt(s,'tau_i = p phi(r_i; s1) / [p phi(r_i; s1) + (1-p) phi(r_i; s2)]',66,215,1130,70,29);
 txt(s,'M-step: weighted estimates',66,313,1130,44,30,true,C.teal);
@@ -76,8 +76,8 @@ table(s,[['Residuals','tau: narrow','1 - tau: wide'],['-1 and +1 dB','0.657949',
 txt(s,'New p = (2 x 0.657949 + 2 x 0.052085) / 4 = 0.355017\nNew s1 = 1.259700 dB     New s2 = 2.622727 dB',66,479,1130,100,29,true);
 note(s,'The larger residuals contribute more weight to the wide component.');
 
-s=slide('Implementation and complexity','Code: em_ruido.py. N: number of residuals. I: number of iterations. Two fixed components. Counts exclude RTI, plotting and I/O. Convergence caution: Wu [2].');
-txt(s,'em_ruido.py',66,153,1130,44,31,true,C.teal);
+s=slide('Implementation and complexity','Code: em.cpp, C++17 compiled with g++ -std=c++17 -O2. Run build/em.exe --demo for the hand-computed example. N: number of residuals, I: number of iterations, two fixed components. Counts exclude RTI, plotting and I/O. Python adapter em_cpp.py calls the executable for all experimental EM fits. Convergence caution: Wu [2].');
+txt(s,'em.cpp (C++17)',66,153,1130,44,31,true,C.teal);
 txt(s,'1  Receive residuals and initial p, s1, s2\n2  Evaluate normal log densities\n3  Normalize posterior responsibilities\n4  Update p and weighted second moments\n5  Apply sigma floor and order components\n6  Stop on small parameter change or iteration cap',66,215,1110,280,28);
 txt(s,'Time: O(I N) for two components\nWorking memory: O(N)',66,527,1130,80,31,true,C.teal);note(s,'N residuals, I iterations. Floor: 0.15 dB. A stopping flag does not prove global optimality.',625);
 

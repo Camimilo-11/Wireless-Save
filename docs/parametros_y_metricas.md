@@ -2,6 +2,7 @@
 
 | Parámetro | Valor | Significado |
 |---|---:|---|
+| Implementación EM | C++17 | Programa nativo em.cpp, invocado por los experimentos auxiliares |
 | Área | 6.4 m × 6.4 m | Área cuadrada sintética |
 | Nodos | 12 | Distribuidos uniformemente en el perímetro |
 | Enlaces | 66 | Todos los pares de nodos, `K(K−1)/2` |

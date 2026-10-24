@@ -44,7 +44,7 @@ def main():
             text = r"\textit{Pending " + name + " URL}"
             lines.append("\\newcommand{\\" + macro + "}{" + text + "}")
     (ROOT / "report" / "enlaces.tex").write_text("\n".join(lines) + "\n", encoding="utf-8")
-    md = ["# Enlaces de la entrega", "", "Python está aprobado por el docente según la confirmación del estudiante.", ""]
+    md = ["# Enlaces de la entrega", "", "El algoritmo EM se entrega en C++17. Python se usa como apoyo para datos, RTI y gráficas.", ""]
     for name in ("overleaf", "github", "video"):
         value = config.get(name)
         md.append(f"- {name.capitalize()}: {value if value else '**pendiente de recibir**'}")

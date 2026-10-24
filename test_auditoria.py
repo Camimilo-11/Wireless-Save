@@ -11,7 +11,7 @@ import unittest
 import numpy as np
 
 from analizar_resultados import align_predictions
-from em_ruido import fit_zero_mean_gmm_em
+from em_cpp import fit_zero_mean_gmm_em
 from simulacion_rti_em_knn import nearest_neighbor_prediction
 
 

@@ -1,4 +1,7 @@
-"""Núcleo del algoritmo EM: mezcla de dos gaussianas con media cero.
+"""Referencia Python para verificar paridad del núcleo oficial C++17 (em.cpp).
+
+No es el backend ejecutado por el simulador; em_cpp.py invoca em.cpp.
+Esta referencia ajusta una mezcla de dos gaussianas con media cero.
 
 Entradas: muestras de ruido (dB), máximo de iteraciones, tolerancia relativa,
 peso inicial, desviaciones iniciales opcionales y piso de desviación.

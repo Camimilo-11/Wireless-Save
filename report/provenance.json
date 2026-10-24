@@ -12,10 +12,47 @@
     "fisher": 15,
     "tikhonov": 29
   },
+  "assigned_algorithm": {
+    "language": "C++17",
+    "source": "em.cpp",
+    "sha256": "f88d31808beae1cd723f942ce404104d552d2b8adc2489ce61e4434d10a19c1f",
+    "packaged_source": "codigo/em.cpp",
+    "packaged_core": "codigo/em_core.cpp",
+    "core_sha256": "698b0458fb70ac54a8fe6f4d8927ae14aa6803b42cbab230f1198b14f7c733b8"
+  },
+  "em_execution": {
+    "backend": "C++17",
+    "source": "em.cpp",
+    "source_sha256": "f88d31808beae1cd723f942ce404104d552d2b8adc2489ce61e4434d10a19c1f",
+    "compiler": "C:\\msys64\\mingw64\\bin\\g++.EXE",
+    "compiler_version": "g++.EXE (Rev5, Built by MSYS2 project) 16.1.0",
+    "flags": [
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-static"
+    ],
+    "command": [
+      "C:\\msys64\\mingw64\\bin\\g++.EXE",
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-static",
+      "C:\\Users\\THINKPAD\\Documents\\GitHub\\Wireless Save\\Wireless Save\\em.cpp",
+      "-o",
+      "C:\\Users\\THINKPAD\\Documents\\GitHub\\Wireless Save\\Wireless Save\\build\\em.exe"
+    ],
+    "executable": "C:\\Users\\THINKPAD\\Documents\\GitHub\\Wireless Save\\Wireless Save\\build\\em.exe"
+  },
+  "supporting_tools": "Python data generation, RTI, plotting, and reference validation",
   "manuscript_sources": [
     {
       "path": "main.tex",
-      "sha256": "60f85b3106e9c688245c8dc984850a2c6e782554aca34d39fcfa5d00db2e1033"
+      "sha256": "dfae7bbce8959f9b0a951961b23124de3fa1f48cbe2685aa03527295a2d44bff"
     },
     {
       "path": "refs.bib",
@@ -23,7 +60,7 @@
     },
     {
       "path": "enlaces.tex",
-      "sha256": "7dc3dd9a6a220568420bdd971619cfcc8c2f59d4b3ed89042f917f152bd45d6d"
+      "sha256": "f533ff246222ff20e387504223ecbe13baf8f6a7d054608815c4572c09d62574"
     },
     {
       "path": "IEEEtran.cls",
@@ -59,19 +96,19 @@
   "results_inputs": [
     {
       "path": "results/python_preliminary/parametros.json",
-      "sha256": "895fbf891026ddaadd2ec9dbaf94b8979841c1819419b4b43b39786d6ddd8792"
+      "sha256": "2383d7fcca4dafec6da0cee8d633754fd50f68fb4d93ef5aec22e5666f3c2ec5"
     },
     {
       "path": "results/python_preliminary/metricas.csv",
-      "sha256": "ad42d62717c02293ced0c2da4e1717f6123ca1d3ea7b5c9e4c206adc655fa1e9"
+      "sha256": "0723e7933bcd4865293759884f87c33f22d83ee66ed6c330cde2da34a7fd668a"
     },
     {
       "path": "results/python_preliminary/em_sample_size.csv",
-      "sha256": "13c56a00dcc74cb25206750d629dd44759279a91d40f5ffc93a785fcbb84df82"
+      "sha256": "71de7855e361772742fa6a7c610932e11972064d792134512a2353f841f60a09"
     },
     {
       "path": "results/python_preliminary/em_initialization.csv",
-      "sha256": "906d822fffe56cef6de6f404d000a3cdaa61b2b5f365b1afef7e6ae89c11e4c5"
+      "sha256": "a875fdfa560e6667188fbdd07c0fa34690eb218db3546f4fbed9d3fa42ee16ff"
     },
     {
       "path": "results/python_preliminary/comparaciones_pareadas.csv",
