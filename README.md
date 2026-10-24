@@ -1,6 +1,6 @@
 # EM para calibración de ruido RSS: estudio sintético con RTI
 
-Proyecto de Análisis de Algoritmos de Camilo Vásquez. El profesor aprobó **Python**. El objetivo principal es explicar y evaluar EM para estimar una mezcla de dos gaussianas con medias fijadas en cero.
+Proyecto de Análisis de Algoritmos 
 
 ## Archivos para grabar y entregar
 
