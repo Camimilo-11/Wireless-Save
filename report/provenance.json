@@ -1,0 +1,85 @@
+{
+  "scope": "Synthetic EM calibration and fixed RTI comparison; no hardware data",
+  "compiler": "Tectonic 0.17.0",
+  "tectonic_bundle": "https://data1.fullyjustified.net/tlextras-2022.0r0.tar",
+  "compiler_distribution": "Official Tectonic GitHub release",
+  "ieeetran_class": "Official CTAN IEEEtran.cls V1.8b (2015-08-26), unmodified",
+  "ieeetran_class_url": "https://ctan.math.illinois.edu/macros/latex/contrib/IEEEtran/IEEEtran.cls",
+  "ieeetran_bst_url": "https://ctan.math.illinois.edu/macros/latex/contrib/IEEEtran/bibtex/IEEEtran.bst",
+  "source_paper_pdf": "https://span.ece.utah.edu/uploads/RTI_version_3.pdf",
+  "source_equations": {
+    "noise": 10,
+    "fisher": 15,
+    "tikhonov": 29
+  },
+  "manuscript_sources": [
+    {
+      "path": "main.tex",
+      "sha256": "60f85b3106e9c688245c8dc984850a2c6e782554aca34d39fcfa5d00db2e1033"
+    },
+    {
+      "path": "refs.bib",
+      "sha256": "f5751f55eac7e414488a4c0e924bb34340f1ff05fc818688b2509b08e74d7ea2"
+    },
+    {
+      "path": "enlaces.tex",
+      "sha256": "7dc3dd9a6a220568420bdd971619cfcc8c2f59d4b3ed89042f917f152bd45d6d"
+    },
+    {
+      "path": "IEEEtran.cls",
+      "sha256": "da751920a317ed318b7b5cd7fa585a6cc7d28502d457856382e9be24b10a3bd7"
+    },
+    {
+      "path": "IEEEtran.bst",
+      "sha256": "314f0ece704568faf827011bac498650691b2b5ee06320720830e782416d5a5f"
+    }
+  ],
+  "figures": [
+    {
+      "source": "figures/em_parameter_recovery.png",
+      "packaged": "figures/em_parameter_recovery.png",
+      "sha256": "f43b467b782ae20f16173a44266b312171aa2d3f71f9f5a3f640e7e660794d12"
+    },
+    {
+      "source": "figures/em_initialization_sensitivity.png",
+      "packaged": "figures/em_initialization_sensitivity.png",
+      "sha256": "a5787d5880738616198af692d5a30d7f8eb0bba36a092a0fa34719ea6e3270e8"
+    },
+    {
+      "source": "results/python_preliminary/comparacion_rti_em_knn.png",
+      "packaged": "figures/comparacion_rti_em_knn.png",
+      "sha256": "d43147e94b6063f7215af3469305c1da7491b7239591fff2d473c18488fecaf6"
+    },
+    {
+      "source": "figures/localization_mean_error.png",
+      "packaged": "figures/localization_mean_error.png",
+      "sha256": "a9d9765328043c0fb5b6c8876597768b8e4be1ae192956cb35a8474d670ed12d"
+    }
+  ],
+  "results_inputs": [
+    {
+      "path": "results/python_preliminary/parametros.json",
+      "sha256": "895fbf891026ddaadd2ec9dbaf94b8979841c1819419b4b43b39786d6ddd8792"
+    },
+    {
+      "path": "results/python_preliminary/metricas.csv",
+      "sha256": "ad42d62717c02293ced0c2da4e1717f6123ca1d3ea7b5c9e4c206adc655fa1e9"
+    },
+    {
+      "path": "results/python_preliminary/em_sample_size.csv",
+      "sha256": "13c56a00dcc74cb25206750d629dd44759279a91d40f5ffc93a785fcbb84df82"
+    },
+    {
+      "path": "results/python_preliminary/em_initialization.csv",
+      "sha256": "906d822fffe56cef6de6f404d000a3cdaa61b2b5f365b1afef7e6ae89c11e4c5"
+    },
+    {
+      "path": "results/python_preliminary/comparaciones_pareadas.csv",
+      "sha256": "a664f9add7ea36b0edfac9e052c0559db2f0432a9bd3a77408f580ce03562f46"
+    },
+    {
+      "path": "results/python_preliminary/predicciones.csv",
+      "sha256": "78724d61f0e0d16580bcca09b6a379bc2e4084ed1a670559b4a2888a4ce215bf"
+    }
+  ]
+}

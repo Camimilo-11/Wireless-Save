@@ -1,0 +1,30 @@
+{
+  "grid_size": 10,
+  "voxels": 100,
+  "radio_nodes": 12,
+  "total_links": 66,
+  "available_links": 66,
+  "room_side_m": 6.4,
+  "ellipse_width_m": 0.1,
+  "alpha": 0.1,
+  "target_attenuation_db": 4.0,
+  "link_loss_fraction": 0.0,
+  "calibration_samples": 5000,
+  "noise_generation_parameters": {
+    "p_narrow": 0.548,
+    "sigma_narrow_db": 0.971,
+    "sigma_wide_db": 3.003
+  },
+  "em_noise_estimate": {
+    "p_narrow": 0.5618915478631457,
+    "sigma_narrow_db": 0.9704573982473145,
+    "sigma_wide_db": 2.993306777389223,
+    "gamma_fisher": 0.4182318686266112,
+    "gamma_gaussian_baseline": 0.22448785227074444,
+    "iterations": 145
+  },
+  "test_cases": 50,
+  "seed": 7,
+  "rti_solver": "inversa densa precalculada",
+  "note": "Todas las mediciones son sintéticas; no representan una medición Wi-Fi real ni una validación con escombros."
+}
