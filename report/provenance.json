@@ -24,7 +24,6 @@
     "backend": "C++17",
     "source": "em.cpp",
     "source_sha256": "f88d31808beae1cd723f942ce404104d552d2b8adc2489ce61e4434d10a19c1f",
-    "compiler": "C:\\msys64\\mingw64\\bin\\g++.EXE",
     "compiler_version": "g++.EXE (Rev5, Built by MSYS2 project) 16.1.0",
     "flags": [
       "-std=c++17",
@@ -33,26 +32,13 @@
       "-Wextra",
       "-pedantic",
       "-static"
-    ],
-    "command": [
-      "C:\\msys64\\mingw64\\bin\\g++.EXE",
-      "-std=c++17",
-      "-O2",
-      "-Wall",
-      "-Wextra",
-      "-pedantic",
-      "-static",
-      "C:\\Users\\THINKPAD\\Documents\\GitHub\\Wireless Save\\Wireless Save\\em.cpp",
-      "-o",
-      "C:\\Users\\THINKPAD\\Documents\\GitHub\\Wireless Save\\Wireless Save\\build\\em.exe"
-    ],
-    "executable": "C:\\Users\\THINKPAD\\Documents\\GitHub\\Wireless Save\\Wireless Save\\build\\em.exe"
+    ]
   },
   "supporting_tools": "Python data generation, RTI, plotting, and reference validation",
   "manuscript_sources": [
     {
       "path": "main.tex",
-      "sha256": "dfae7bbce8959f9b0a951961b23124de3fa1f48cbe2685aa03527295a2d44bff"
+      "sha256": "4210717319e88d1d14e921044b3a6d1c0029335d82ba9aff9ee67eb526238759"
     },
     {
       "path": "refs.bib",
@@ -60,7 +46,7 @@
     },
     {
       "path": "enlaces.tex",
-      "sha256": "f533ff246222ff20e387504223ecbe13baf8f6a7d054608815c4572c09d62574"
+      "sha256": "a63ba2c64f45dd62d4f1a3a5c43eb3974cce83a2174a1d88f1870f0e28f8f341"
     },
     {
       "path": "IEEEtran.cls",

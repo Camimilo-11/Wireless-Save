@@ -1,6 +1,6 @@
-"""Comprobaciones focalizadas de la extracción EM y del emparejamiento por ID.
+"""Pruebas del análisis pareado, del control numérico EM y de la escala KNN.
 
-Ejecutar: python -B -m unittest test_auditoria -v
+Ejecutar: python -B -m unittest discover -s tests -v
 No ejecuta la simulación ni modifica resultados guardados.
 """
 from __future__ import annotations
@@ -15,7 +15,7 @@ from em_cpp import fit_zero_mean_gmm_em
 from simulacion_rti_em_knn import nearest_neighbor_prediction
 
 
-class AuditChecks(unittest.TestCase):
+class AnalysisChecks(unittest.TestCase):
     def setUp(self) -> None:
         self.rows = [
             {"caso": str(case), "metodo": method, "x_real_m": str(case),
@@ -45,7 +45,7 @@ class AuditChecks(unittest.TestCase):
             align_predictions(rows, ["A", "B"], 3)
 
     def test_em_known_zero_mean_mixture(self) -> None:
-        # Salida calculada con el código original respaldado antes de extraerlo.
+        # Estimación de referencia para una muestra fija; detecta regresiones numéricas.
         values = np.tile(np.array([-0.5, 0.5, -1.0, 1.0, -4.0, 4.0]), 100)
         p, s1, s2, _, converged = fit_zero_mean_gmm_em(values, 500)
         self.assertTrue(converged)

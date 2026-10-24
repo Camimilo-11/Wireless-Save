@@ -1,4 +1,4 @@
-% Course manuscript. The editable source is deliberately independent of ReportLab.
+% Synthetic EM/RTI study. Editable IEEEtran manuscript.
 % Compile: tectonic --keep-logs --keep-intermediates main.tex
 \documentclass[conference,letterpaper]{IEEEtran}
 \usepackage[T1]{fontenc}
@@ -26,7 +26,7 @@ Yachay Tech University\\Urcuqu\'i, Ecuador}}
 \begin{document}
 \maketitle
 \begin{abstract}
-This course project examines Expectation--Maximization (EM) as an algorithm for estimating a two-component, zero-mean Gaussian mixture used to describe received-signal-strength (RSS) noise. A synthetic radio tomographic imaging (RTI) model provides the application context. The study separates parameter recovery from localization: EM is evaluated across five calibration sample sizes and 20 initializations, whereas classical Tikhonov RTI, a scalar Fisher-information extension, a weighted nearest-neighbor baseline, and a constant room-center control are evaluated on 500 paired generated cases. Parameter recovery generally improves with sample size under the correctly specified generating model. Mean localization errors are 3.244, 3.062, 2.618, and 2.407~m, respectively. All signal-dependent methods therefore lose to the constant control in mean error. Algebra shows that the Fisher extension merely changes the effective Tikhonov regularization from $\alpha$ to $\alpha/\gamma$; it does not provide link-specific robustness. The results support a reproducible instructional implementation of EM but do not establish useful localization, superiority over nearest neighbors, or real Wi-Fi sensing performance. The report provides the EM derivation, a numerical iteration, pseudocode, complexity analysis, traceable results, and a plan for independent development and test evaluation. The assigned EM algorithm is implemented in C++17; Python supplies data generation, RTI, validation, and plotting utilities.
+This study examines Expectation--Maximization (EM) as an algorithm for estimating a two-component, zero-mean Gaussian mixture used to describe received-signal-strength (RSS) noise. A synthetic radio tomographic imaging (RTI) model provides the application context. The study separates parameter recovery from localization: EM is evaluated across five calibration sample sizes and 20 initializations, whereas classical Tikhonov RTI, a scalar Fisher-information extension, a weighted nearest-neighbor baseline, and a constant room-center control are evaluated on 500 paired generated cases. Parameter recovery generally improves with sample size under the correctly specified generating model. Mean localization errors are 3.244, 3.062, 2.618, and 2.407~m, respectively. All signal-dependent methods therefore lose to the constant control in mean error. Algebra shows that the Fisher extension merely changes the effective Tikhonov regularization from $\alpha$ to $\alpha/\gamma$; it does not provide link-specific robustness. The results support a reproducible implementation of EM but do not establish useful localization, superiority over nearest neighbors, or real Wi-Fi sensing performance. The report provides the EM derivation, a numerical iteration, pseudocode, complexity analysis, traceable results, and a plan for independent development and test evaluation. The EM algorithm is implemented in C++17; Python supplies data generation, RTI, validation, and plotting utilities.
 \end{abstract}
 \begin{IEEEkeywords}
 expectation--maximization, Gaussian mixture, RSS, radio tomographic imaging, parameter estimation, synthetic evaluation
@@ -37,7 +37,7 @@ Radio tomographic imaging estimates changes in spatial attenuation from signal-s
 
 EM estimates parameters in models with unobserved variables by alternating a conditional-expectation calculation and a parameter update~\cite{dempster1977}. In a mixture model, the missing variable is the component that generated each observation. The observed residual is available; its component label is not. This distinction matters because estimating latent labels is different from imputing missing RSS measurements. No missing measurements are imputed in the present implementation.
 
-The project studies a particularly small model: a mixture of two normal distributions whose means are fixed at zero. One component has a narrower spread, the other a wider spread. The parameters to estimate are one mixing probability and two standard deviations. This restricted problem is useful for an algorithms course because both steps of EM admit transparent formulas and an iteration can be checked by hand. It also illustrates initialization, convergence criteria, numerical stability, and the distinction between a fitted model and a validated application.
+The project studies a particularly small model: a mixture of two normal distributions whose means are fixed at zero. One component has a narrower spread, the other a wider spread. The parameters to estimate are one mixing probability and two standard deviations. Both EM steps admit explicit formulas and one iteration can be checked numerically. The restricted model also makes initialization, convergence criteria, numerical stability, and the distinction between density estimation and application validation directly inspectable.
 
 The application begins with a geometric matrix linking 100 image pixels to 66 radio links. Synthetic observations are generated by adding mixture noise to the attenuation predicted by that matrix. EM is fitted to a separate synthetic calibration sample. The estimated density then produces a scalar Fisher information, $\gamma$. An exploratory RTI operator inserts that scalar into regularized normal equations. This construction is explicitly distinguished from the source article's classical Tikhonov estimator and from an exact mixture-likelihood estimator.
 
@@ -45,7 +45,7 @@ The initial comparison contained three signal-dependent methods. Adding a consta
 
 This report addresses three research questions. RQ1 asks how calibration sample size affects EM recovery of known mixture parameters. RQ2 asks whether different initializations on one fixed sample give different fitted solutions. RQ3 asks what the generated localization comparison actually establishes after including a spatial control and identifying the algebraic effect of $\gamma$. These questions can be answered using the available data without claiming electromagnetic simulation, real deployment performance, or an algorithmic innovation.
 
-The deliverable comprises a readable C++17 EM implementation, repeated calibration diagnostics, a paired synthetic localization evaluation, and editable scientific documentation. Its practical boundary is precise: no hardware, human measurements, walls, rubble, propagation solver, channel-state information (CSI), angle of arrival, or time of arrival are involved. The algorithm assigned by the course is implemented in C++; auxiliary Python utilities prepare observations and evaluate the surrounding RTI application. The student must explain that division of responsibilities together with the estimation algorithm.
+The implementation provides a C++17 EM core, repeated calibration diagnostics, a paired synthetic localization evaluation, and editable scientific documentation. Its practical boundary is precise: no hardware, human measurements, walls, rubble, propagation solver, channel-state information (CSI), angle of arrival, or time of arrival are involved. C++ executes the calibration algorithm; auxiliary Python utilities prepare observations and evaluate the surrounding RTI application.
 
 \section{Background and Scope of the Evidence}
 \subsection{EM and incomplete data}
@@ -196,7 +196,7 @@ The implementation stores standard deviations, so it takes square roots after up
 \begin{tabular}{@{}p{0.19\columnwidth}p{0.72\columnwidth}@{}}
 \toprule
 Symbol & Meaning and units\\\midrule
-$N,I$ & Calibration sample count and iterations; dimensionless\\
+$N,I,I_{\max}$ & Residual count, executed iterations, and iteration limit\\
 $p,\tau_i$ & Mixing probability and conditional responsibility\\
 $r_i,\sigma_k$ & Residual and standard deviation; dB\\
 $\sigma_k^2$ & Component variance; dB$^2$\\
@@ -217,7 +217,7 @@ The implementation's probability clipping, minimum standard deviations, and fini
 
 \section{Worked Iteration and Algorithm Structure}
 \subsection{A numerical example}
-Consider the four residuals $(-3,-1,1,3)$~dB and initial values $p=.5$, $\sigma_1=1$, $\sigma_2=3$~dB. This is a teaching example for one iteration, not one of the 500 localization cases. It can be reproduced directly with the density and update equations.
+Consider the four residuals $(-3,-1,1,3)$~dB and initial values $p=.5$, $\sigma_1=1$, $\sigma_2=3$~dB. This numerical illustration concerns one iteration and is separate from the 500 localization cases. It can be reproduced directly with the density and update equations.
 
 At absolute residual 1, the two unweighted densities are approximately .241971 and .125794~dB$^{-1}$. With equal mixing probabilities, their normalized ratio gives $\tau(1)=.657949$. At absolute residual 3, the densities are approximately .004432 and .080657~dB$^{-1}$, giving $\tau(3)=.052085$. Symmetry supplies the same values at negative residuals.
 
@@ -230,41 +230,57 @@ v_2^{\rm new}&=\frac{2(.342051)(1)+2(.947915)(9)}{2.579932}
 \end{align}
 Taking square roots yields $\sigma_1^{\rm new}=1.259700$ and $\sigma_2^{\rm new}=2.622727$~dB. The E-step favored the wide component strongly for the two large residuals, and the M-step converted those fractional memberships into a lower narrow-component probability and updated spreads.
 
-This example also exposes a common misconception: EM does not eliminate the large residuals. They remain observed values and contribute to both parameter estimates according to their responsibilities. Nor does it relocate the target; no geometry or position variable appears in this calibration example. Explaining these two points is sufficient to distinguish the algorithmic contribution from later RTI calculations.
+EM does not eliminate the large residuals in this example. They remain observed values and contribute to both parameter estimates according to their responsibilities. No geometry or position variable appears in the calibration updates; target localization belongs to the subsequent RTI calculation.
 
 \subsection{Pseudocode}
-Algorithm~\ref{alg:em} uses the same information flow as the implementation. The likelihood evaluation may be added to the return record, but it does not replace the documented parameter-change stopping rule.
+Algorithm~\ref{alg:em} states the mathematical iteration using normal densities $\phi$ to expose the E-step and M-step. The executed C++ routine evaluates log densities and normalizes them stably, as described in Section~\ref{sec:numerical}. The density notation below is an explanatory expression, not a replacement for that stable implementation. Component masses are protected before division, and the updated parameters are bounded and ordered before the stopping test.
 
 \begin{table}[t]
 \caption{Pseudocode for the restricted EM fit}
 \label{alg:em}
 \centering
 \begin{minipage}{.97\columnwidth}\small
-\textbf{Input:} finite residual vector $r$; initial $p,\sigma_1,\sigma_2$; tolerance $\eta$; floor $s_{\min}$; limit $I_{\max}$.\\
-1. Validate the residual count and retain finite values.\\
-2. Choose positive initial spreads and an interior weight.\\
-3. For $t=1,\ldots,I_{\max}$:\\
-\hspace*{.8em}a. Save the old three-parameter vector.\\
-\hspace*{.8em}b. Compute both log component densities.\\
-\hspace*{.8em}c. Normalize them to obtain all $\tau_i$.\\
-\hspace*{.8em}d. Compute $N_1,N_2$ and update $p$.\\
-\hspace*{.8em}e. Update weighted second moments and square roots.\\
-\hspace*{.8em}f. Apply the spread floor; reorder labels if necessary.\\
-\hspace*{.8em}g. If maximum relative parameter change $<\eta$,\\
-\hspace*{1.8em}return parameters, $t$, and convergence=true.\\
-4. Return final parameters, $I_{\max}$, convergence=false.\\
-\textbf{Output:} fitted weight, two spreads, iteration count, flag.
+\textbf{Input:} finite residuals $r[1..N]$; limit $I_{\max}$; tolerance $\varepsilon$; spread floor $s_{\min}$.\\
+Initialize $\theta\leftarrow(p,\sigma_1,\sigma_2)$; set $\delta=10^{-8}$.\\
+\textbf{for} $t\leftarrow1$ \textbf{to} $I_{\max}$:\\
+\hspace*{.8em}$\theta_{\rm old}\leftarrow\theta$\\
+\hspace*{.8em}\textit{E-step:}\quad\textbf{for} $i\leftarrow1$ \textbf{to} $N$:\\
+\hspace*{1.6em}$a\leftarrow p\phi(r_i;0,\sigma_1^2)$\\
+\hspace*{1.6em}$b\leftarrow(1-p)\phi(r_i;0,\sigma_2^2)$\\
+\hspace*{1.6em}$\tau_i\leftarrow a/(a+b)$\\
+\hspace*{.8em}\textit{M-step:}\\
+\hspace*{.8em}$N_1\leftarrow\max(\sum_i\tau_i,\delta)$;\quad$N_2\leftarrow\max(N-N_1,\delta)$\\
+\hspace*{.8em}$p\leftarrow\operatorname{clip}(N_1/N,10^{-4},1-10^{-4})$\\
+\hspace*{.8em}$\sigma_1\leftarrow\sqrt{\sum_i\tau_i r_i^2/N_1}$\\
+\hspace*{.8em}$\sigma_2\leftarrow\sqrt{\sum_i(1-\tau_i)r_i^2/N_2}$\\
+\hspace*{.8em}Apply $\sigma_k\geq s_{\min}$ and order components.\\
+\hspace*{.8em}If spreads swap, also set $p\leftarrow1-p$.\\
+\hspace*{.8em}$\theta\leftarrow(p,\sigma_1,\sigma_2)$\\
+\hspace*{.8em}\textbf{if} $\max_k|\theta_k-\theta_{{\rm old},k}|/
+\max(|\theta_{{\rm old},k}|,\delta)<\varepsilon$:\\
+\hspace*{1.6em}\textbf{return} $\theta,t,\mathrm{true}$\\
+\textbf{return} $\theta,I_{\max},\mathrm{false}$
 \end{minipage}
 \end{table}
 
 \subsection{Time and memory complexity}
-For a fixed two-component model, evaluating densities and responsibilities visits each of $N$ residuals once per iteration. Computing the two weighted sums of squared residuals has the same order. Updating the three scalars, ordering the components, and checking the stopping rule take constant work. Thus $I$ iterations require $O(IN)$ arithmetic operations. Treating the iteration count as a constant would hide a quantity that changes with tolerance, initialization, and sample configuration.
+Let $N$ be the number of valid scalar residuals, $I$ the number of iterations actually executed, and $I_{\max}$ the configured limit. The analysis assumes two fixed components and fixed-precision arithmetic. A representative basic operation is evaluating one sample's density, or log density, for one component. The E-step performs two such evaluations per sample and iteration, so its representative count is
+\begin{equation}
+C_E(N,I)=\sum_{t=1}^{I}\sum_{i=1}^{N}\sum_{k=1}^{2}1=2IN.
+\label{eq:basiccount}
+\end{equation}
+This counts sample--component evaluations. It is not an exact count of all arithmetic operations: normalization, exponentials, divisions, and the M-step also contribute work.
 
-The C++ implementation stores the residual vector and a length-$N$ responsibility vector. The component densities, effective counts, and weighted squared sums can be evaluated using scalar variables during passes over those vectors. This gives $O(N)$ working memory for the implemented fit. It does not describe the memory for the RTI image operator, the fingerprint database, plots, or stored result tables. A streaming redesign could change auxiliary storage, but it is not the implementation evaluated here.
+Input validation/filtering and dispersion-based initialization take $\Theta(N)$ time. Within an iteration, the E-step traverses the residuals in $\Theta(N)$ time; the M-step computes effective counts and weighted moments in $\Theta(N)$ time; and the three-parameter stopping check, bounds, and label ordering take $\Theta(1)$ time. Therefore, for $I\geq1$,
+\begin{align}
+T(N,I)&=\Theta(N)+I[\Theta(N)+\Theta(N)+\Theta(1)]\nonumber\\
+&=\Theta(IN),\qquad T(N,I)\in O(I_{\max}N).
+\end{align}
+The E-step and M-step are successive passes, so their costs add. They are not two nested loops over $N$ and do not produce an $N^2$ cost. The loop over two components in Eq.~\eqref{eq:basiccount} has fixed size.
 
-Multiple starts and repeated sample-size experiments multiply the computational work. With $S$ starts on one sample, the cost is $O(N\sum_{s=1}^S I_s)$; for a rough common iteration count it is $O(SIN)$. With several sample sizes and repeated draws, the workload adds over those fits. These distinctions explain why a short core function can still be called many times by a longer experiment driver.
+One iteration is linear in $N$; the full fit is not simply ``always $O(N)$.'' Its executed iteration count depends on the data, initialization, and stopping tolerance $\varepsilon$. For fixed $I$, time grows linearly with $N$. Repeated fits add costs: for $S$ starts, $\Theta(N\sum_{s=1}^{S}I_s)$ accounts for potentially different iteration counts. The saved configuration uses $I_{\max}=500$ and $\varepsilon=10^{-7}$.
 
-The derivation does not assume that every EM iteration is equally fast on every machine. Compiler settings, memory allocation, loop implementation, and memory traffic affect measured time. Calling the C++ process through a Python adapter also adds interface overhead that is distinct from the E-step and M-step. Complexity describes scaling of the algorithmic work. A reproducible timing study would need a separate protocol, whereas the current report avoids claiming a speed advantage from one local measurement.
+The C++ routine stores a responsibility vector \texttt{tau} of length $N$, giving $\Theta(N)$ auxiliary memory beyond its input vector. Component densities, weighted sums, three parameters, iteration index, and returned result require $\Theta(1)$ space. The input itself occupies $\Theta(N)$ space. These bounds apply to one EM fit and exclude RTI matrices, fingerprints, plots, process startup, and file handling. Observed runtimes also depend on compiler settings and interface overhead; they are not a proof of the asymptotic operation count.
 
 \section{Numerical Implementation}
 \label{sec:numerical}
@@ -303,7 +319,7 @@ Thus the floor is retained as a numerical and modeling restriction, including pr
 \subsection{Separation between core and experiment driver}
 The standalone \texttt{em.cpp} source contains the assigned E-step and M-step using explicit loops and standard C++17 facilities. It is compiled with \texttt{g++}; an auxiliary \texttt{em\_cpp.py} adapter supplies residuals and reads the returned parameters. The main calibration fit, sample-size diagnostics, and initialization diagnostics use that compiled backend. Geometry, random-data generation, RTI reconstruction, bootstrap summaries, and plotting remain Python utilities outside the assigned EM core.
 
-The C++ core in Appendix~\ref{app:code} is taken from the editable source packaged with this report. Command-line parsing and the presentation demo surround that function in the full source; they are not additional EM steps. The Python implementation is retained as a reference for numerical cross-checks, rather than silently substituted for the selected C++ backend. This boundary lets the student defend the estimation loop independently of the longer experimental driver.
+The C++ core in Appendix~\ref{app:code} is taken from the editable source packaged with this report. Command-line parsing and the numerical demonstration surround that function in the full source; they are not additional EM steps. The Python implementation in \path{validation/em_reference.py} is retained for numerical cross-checks. The selected experimental backend remains C++, and the estimation loop is separated from the surrounding experimental driver.
 
 \section{Synthetic RTI and Comparison Methods}
 \subsection{Geometry and forward model}
@@ -494,7 +510,7 @@ They do not imply that the extension wins against a tuned Tikhonov family, that 
 
 \section{Interpretation and Threats to Validity}
 \subsection{What the EM result means}
-The recovery experiment provides evidence that the implementation performs its intended restricted estimation task. It computes soft component assignments and updates a mixing probability and two second moments. Across the tested calibration sizes, its error generally decreases with more generated observations. That result is aligned with the assumptions of the experiment and can be defended without requiring EM to outperform an unrelated localization rule.
+The recovery experiment provides evidence that the implementation performs its intended restricted estimation task. It computes soft component assignments and updates a mixing probability and two second moments. Across the tested calibration sizes, its error generally decreases with more generated observations. This result establishes calibration behavior under the stated assumptions; it does not establish an advantage over a localization rule solving a different task.
 
 Parameter estimation and target localization have different ground truths. For calibration, the known parameters define an unambiguous recovery score. For localization, a fitted density is only one part of a pipeline that also depends on geometry, target representation, regularization, and the coordinate extraction rule. A well-fitted noise model cannot by itself correct a poor spatial forward model or a strongly biased position estimator.
 
@@ -510,7 +526,7 @@ A bounded room offers prior positional information even without signals. Always 
 
 The deficit motivates inspecting case distributions and model settings before expanding to rescue scenarios. Potential contributors include the single-pixel target, sparse geometric sensitivity, noise amplitude relative to signal, smoothing choices, and the maximum-pixel rule. The current evidence does not isolate their relative contributions. Naming them as hypotheses is different from claiming to have diagnosed a measured radio failure.
 
-Adding the control is an outcome of audit and strengthens the report's interpretability. It also prevents an assignment from requiring a predetermined ranking. If a course objective is to understand EM and evaluate an application, a negative application result can be informative when the algorithm, comparison, and limitations are correctly explained. The result should not be altered by selecting a seed or noise regime solely because it makes EM win.
+Adding the control identifies a negative application result that a comparison among signal-dependent predictors alone would conceal. The generated localization benchmark does not demonstrate utility beyond the spatial prior. Independent development/test evaluation and repeated configurations are required before changing that conclusion. Selecting only seeds or noise regimes favoring one method would answer a different, selectively defined question.
 
 \subsection{Comparison fairness and data leakage}
 K-NN receives labeled references at every grid cell, including cells that can recur as test targets. Independent noise draws prevent identical training vectors, but the evaluation is spatially matched to the reference map. This is a legitimate matched-grid fingerprint test if described as such. It is not a held-out-position generalization test and should not be labeled one.
@@ -539,8 +555,8 @@ Two spatial tasks should be distinguished. A matched-grid task allows test locat
 
 The first decision criterion is mean-distance improvement over the center control, accompanied by RMSE and a distribution of errors. The second is whether an EM-based method improves over an independently tuned Tikhonov method. The third is whether any improvement persists across full-pipeline repetitions, rather than a single favorable calibration fit. No numerical threshold is declared achieved by the present study.
 
-\subsection{If calibration behavior is the main assignment}
-For a short algorithms deliverable, EM recovery is already the clearest experiment. A follow-up can vary separation of the two spreads, narrow-component probability, sample size, initialization, or stopping tolerance while keeping the task identifiable. Each factor should have a stated hypothesis and its own table of recovered parameters and convergence behavior.
+\subsection{Calibration-focused follow-up}
+For an EM-focused calibration study, a follow-up can vary separation of the two spreads, narrow-component probability, sample size, initialization, or stopping tolerance while keeping the task identifiable. Each factor requires a stated hypothesis and a corresponding summary of recovered parameters and convergence behavior.
 
 For example, bringing the two spreads close together reduces the practical distinction between components. It may become harder to recover the individual parameters even when the fitted density predicts held-out residuals reasonably well. Measuring both parameter error and predictive log likelihood would reveal that difference. This proposed experiment would teach a more precise limitation of mixture estimation than simply labeling a localization result as an EM success or failure.
 
@@ -553,32 +569,30 @@ Link-wise offset removal and exploratory distributions would then precede mixtur
 
 Only after those checks would obstacle experiments be interpretable. An eventual search-and-rescue motivation requires substantially more evidence about propagation, availability of a baseline, deployment access, motion, false alarms, and field conditions. None of those requirements is resolved by the current synthetic parameter-recovery result.
 
-\section{Reproducibility and Course Deliverables}
+\section{Reproducibility}
 \subsection{Editable source and compilation}
-This manuscript uses the official IEEEtran conference class and a continuous two-column LaTeX flow. The editable package contains \texttt{main.tex}, \texttt{refs.bib}, \texttt{enlaces.tex}, the figures, and the unmodified class and bibliography style. It can be uploaded to Overleaf with \texttt{main.tex} as the main document. The supplied Python compilation helper invokes a local LaTeX engine and packages those sources; it does not generate page images disguised as editable manuscript text.
+The manuscript uses the official IEEEtran conference class and continuous two-column LaTeX flow. The editable package contains \texttt{main.tex}, \texttt{refs.bib}, \texttt{enlaces.tex}, figures, source-code listings, and the unmodified class and bibliography style. Its main document is \texttt{main.tex}; the bibliography uses BibTeX with the IEEEtran style.
 
-The PDF is a course manuscript, not a published IEEE article or evidence of journal acceptance. The IEEE layout supports a clear technical presentation. The content and length follow the course deliverable, while source traceability and explicit limitations remain the author's responsibility.
+The PDF is a project manuscript. Its use of the IEEEtran layout does not imply publication or peer review. The source package and provenance manifest permit independent inspection of the document, figures, implementation, and input-result files.
 
 \subsection{Reproduction sequence}
-The assigned source is \texttt{em.cpp}, compiled as C++17. The auxiliary experiment command is \texttt{python simulacion\_rti\_em\_knn.py}, using the documented C++ backend defaults. The adapter executes the compiled EM routine for calibration and its repeated diagnostics. Python writes the local result tables, carries out the surrounding RTI computations, and produces comparison plots. A Python reference fit is available for implementation validation and is identified explicitly when selected.
+The EM source is \texttt{em.cpp}, compiled as C++17. The auxiliary experiment command is \texttt{python simulacion\_rti\_em\_knn.py}, using the documented C++ backend defaults. The adapter executes the compiled EM routine for calibration and its repeated diagnostics. Python writes the local result tables, carries out the surrounding RTI computations, and produces comparison plots. A Python reference fit is available for implementation validation and is identified explicitly when selected.
 
-The explicit build command is \texttt{python compilar\_cpp.py}; the helper invokes \texttt{g++} and records its actual flags and version. Running \texttt{build/em.exe --demo} executes the four-residual, one-iteration example in C++. The source requires only the C++ standard library. Its command-line fitting mode accepts residuals and initial settings, so the assigned algorithm can also be exercised independently of the RTI driver.
+The explicit build command is \texttt{python compilar\_cpp.py}; the helper invokes \texttt{g++} and records its actual flags and version. Running \texttt{build/em.exe --demo} executes the four-residual, one-iteration example in C++. The source requires only the C++ standard library. Its command-line fitting mode accepts residuals and initial settings, so the calibration algorithm can also be exercised independently of the RTI driver.
 
 Rerunning the experiment overwrites generated outputs in the selected output directory, so an archived result snapshot should be kept when comparing manuscript versions. Reported numerical claims should always identify a single coherent run. The manuscript package preserves copies of its plotted figures, and its provenance note identifies their source files rather than synthesizing historical outcomes from different runs.
 
 An independent reader can check the error table directly from saved predictions, the EM diagnostic table from its replicate summary, the mixture density from the fitted parameters, and the scalar equivalence by factoring $\gamma$ from the normal equations. These checks cover different failure modes and are more informative than treating the existence of a PDF as evidence that the computation is correct.
 
-\subsection{Submission links and implementation language}
-The course implementation of EM is C++17. The deliverable includes its editable source and a short explainable core for the oral defense. Auxiliary Python scripts support the synthetic application and numerical validation. This language division is stated explicitly so that execution of a Python experiment driver is not confused with the language implementing the assigned algorithm.
-
-The author must complete and verify the manuscript, repository, and video URLs in the delivery appendix. Pending links are shown explicitly as text; no public repository, uploaded Overleaf project, or recorded presentation is invented. The editable source can be compiled before those external delivery steps are completed.
+\subsection{Implementation and artifact availability}
+The EM implementation is C++17. Auxiliary Python scripts support the synthetic application and numerical validation. The repository, manuscript workspace, and recorded-presentation links are listed in Appendix~\ref{app:links}; a pending entry indicates that a public URL is not yet available.
 
 \section{Conclusion}
 The restricted C++17 EM implementation recovers known mixture parameters with decreasing error as calibration sample size generally increases, and the tested random starts yield nearly identical estimates on one fixed sample. These are direct, reproducible findings about the algorithm under its own generating assumptions. The derivation and numerical example explain why responsibilities and weighted second moments produce those updates. Python utilities support the surrounding synthetic application and the reference cross-checks.
 
 The localization result is substantially weaker. Mean errors are 3.244~m for classical Tikhonov RTI, 3.062~m for its scalar Fisher extension, 2.618~m for weighted K-NN, and 2.407~m for the constant room-center control. Every signal-dependent method loses to that control in mean error. Moreover, the scalar extension is exactly a Tikhonov regularization change after rescaling, so its improvement cannot be attributed to link-specific robustness or a new EM localization mechanism.
 
-The defensible course contribution is a transparent study of EM noise calibration connected to a limited synthetic RTI application. Useful localization, real Wi-Fi sensing, NLoS robustness, missing-data reconstruction, and obstacle penetration remain unestablished. Independent parameter tuning and a control-aware follow-up should precede broader application claims.
+The contribution is a transparent study of EM noise calibration connected to a limited synthetic RTI application. Useful localization, real Wi-Fi sensing, NLoS robustness, missing-data reconstruction, and obstacle penetration remain unestablished. Independent parameter tuning and a control-aware follow-up should precede broader application claims.
 
 \appendices
 \section{The C++17 EM Core}
@@ -591,21 +605,22 @@ The four-sample worked example can be checked through the C++ demonstration usin
 \lstinputlisting[language=C++,linewidth=\textwidth,caption={Executed C++17 EM core for two Gaussian components with means fixed at zero. Extracted from the packaged editable source.},label={lst:em}]{codigo/em_core.cpp}
 \end{figure*}
 
-\section{Equation-to-Code Explanation for the Defense}
+\section{Equation-to-Code Mapping}
 The input vector contains observed residuals, and the three scalar state variables are the parameters being estimated. The code does not receive latent labels from the generator. In \texttt{responsibility}, \texttt{a} and \texttt{b} represent log component probabilities, \texttt{largest} stabilizes exponentiation, and \texttt{ea} and \texttt{eb} provide normalized exponential terms. The E-step stores the returned narrow-component probabilities in the \texttt{tau} vector.
 
 In the M-step, \texttt{mass1} and \texttt{mass2} are fractional sample counts. An explicit loop accumulates \texttt{square\_sum1} and \texttt{square\_sum2}, the weighted squared residuals. Dividing by the masses gives component variances because the means are fixed at zero. The square roots restore the standard-deviation parameterization. The \texttt{change} calculation measures whether the three parameters have stabilized relative to their previous magnitudes.
 
 The floor and probability clipping restrict the parameter domain. The component swap changes names rather than the density, provided the probability is complemented at the same time. The convergence flag indicates whether the requested stopping condition was satisfied; it does not replace examination of the fitted density, sample adequacy, or the likelihood surface.
 
-A concise oral explanation can follow this sequence: identify observed residuals and hidden component labels; write the two density values for one residual; normalize them to obtain its responsibility; sum responsibilities and weighted squares; update the three parameters; repeat until stable. RTI geometry should be introduced afterward so the student can demonstrate the EM algorithm independently of the larger simulation driver.
+This mapping separates the latent-label estimation problem from the RTI geometry. The EM function receives residuals and returns three fitted noise parameters and convergence information. Image reconstruction and coordinate prediction are downstream computations with different inputs, outputs, and computational costs.
 
 \section{Artifact and Claim Traceability}
-The following mapping identifies which file supports each main result. Paths are relative to the repository and refer to one current preliminary-results snapshot. It distinguishes a measured local computation from a source-paper statement and from an untested future proposal.
+Table~\ref{tab:traceability} maps the reported results to the current experiment snapshot. Paths are repository-relative; \path{provenance.json} records input, source, and figure hashes.
 
 \begin{table}[h]
 \caption{Traceability of numerical and methodological claims}
-\centering\small
+\label{tab:traceability}
+\centering\footnotesize
 \begin{tabular}{@{}p{.38\columnwidth}p{.55\columnwidth}@{}}
 \toprule
 Claim or artifact & Evidence origin\\\midrule
@@ -615,34 +630,23 @@ Sample-size recovery & \path{em_sample_size.csv}\\
 Initialization agreement & \path{em_initialization.csv}\\
 Position mean and RMSE & \path{metricas.csv}; case predictions\\
 Paired error reductions & \path{comparaciones_pareadas.csv}\\
-Figure 4 example images & Preliminary-results comparison PNG\\
-Figure 5 and center control & Aggregate error plot, metrics, predictions\\
+Figures and source hashes & \path{provenance.json}\\
 $\alpha/\gamma$ equivalence & Algebra of Eqs.~\eqref{eq:fisheroperator}--\eqref{eq:equivalence}\\
-Real obstacles or NLoS robustness & Not evaluated\\
-Missing-RSS imputation & Not implemented\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The source of Fig.~\ref{fig:comparison} is the comparison PNG copied from the current preliminary-results directory at compilation. The recovery and initialization figures are copies of local plots backed by their named diagnostic CSV files. The bundle includes a provenance manifest containing source paths and hashes so a later figure change can be detected.
+Figure~\ref{fig:comparison} uses the current preliminary-results comparison PNG; the other plots correspond to the diagnostic and metric files identified in their captions.
 
 \section{Delivery Links}
 \label{app:links}
-The three fields below are the delivery endpoints to be completed by the author. The local manuscript and source bundle are available independently of whether these external URLs have been supplied. A pending field is not an asserted public upload.
+Project artifact links are listed below. Pending entries indicate unavailable URLs.
 
 \noindent\textbf{Overleaf manuscript:} \OverleafLink
 
 \medskip\noindent\textbf{GitHub repository:} \GitHubLink
 
 \medskip\noindent\textbf{Recorded presentation:} \VideoLink
-
-\medskip
-The completion keys are listed below. The file \texttt{enlaces.tex} stores these fields separately so verified URLs can be inserted and the manuscript rebuilt without changing the scientific text.
-\begin{flushleft}\small\ttfamily
-PENDIENTE\_ENLACE\_OVERLEAF\\
-PENDIENTE\_ENLACE\_GITHUB\\
-PENDIENTE\_ENLACE\_VIDEO
-\end{flushleft}
 
 \bibliographystyle{IEEEtran}
 \bibliography{refs}

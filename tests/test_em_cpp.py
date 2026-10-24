@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 
 from em_cpp import backend_executable, backend_metadata, fit_zero_mean_gmm_em
-from em_ruido import fit_zero_mean_gmm_em as python_reference
+from validation.em_reference import fit_zero_mean_gmm_em as python_reference
 
 
 class CppParityChecks(unittest.TestCase):
