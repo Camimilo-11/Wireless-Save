@@ -1,6 +1,6 @@
 # Expectation–Maximization for RSS noise calibration
 
-Reproducible algorithm study by Camilo Vásquez, Yachay Tech University. The assigned EM implementation uses **C++17** and the standard library. Python supports synthetic data generation, the RTI/KNN experiment, analysis and figures.
+Analysis of Algorithms project by Camilo Vásquez, Yachay Tech University. The assigned EM implementation uses **C++17** and the standard library. Python supports synthetic data generation, the RTI/KNN experiment, analysis and figures.
 
 ## Repository contents
 
